@@ -1,0 +1,118 @@
+
+
+.suform {
+  width: 50%;
+  border: 2px solid blue;
+}
+
+.appContainer{
+  display: flex;
+  flex-direction: row;
+  border-radius: 20px;
+  background-color:#141010;
+  position: relative;
+  padding-left: 30px;
+  padding-right: 30px;
+  position: relative;
+  width: 340px;
+}
+
+.label{
+  margin-bottom: 10px;
+  /* border: 2px solid; */
+}
+
+
+.custom-text-field .MuiInput-underline:before {
+  border-bottom-color: #d59bf6;
+}
+
+.custom-text-field .MuiInput-underline:hover:not(.Mui-disabled):before {
+  border-bottom-color: #d59bf6;
+}
+
+.custom-text-field .MuiInput-underline:after {
+  border-bottom-color: #d59bf6;
+}
+
+.custom-text-field .MuiInputLabel-root {
+  color: #dcd6f7;
+  font-family: 'Kanit', sans-serif;
+}
+
+.custom-text-field .MuiInputLabel-root.Mui-focused {
+  color: #d59bf6;
+}
+
+.custom-text-field .MuiInputBase-input {
+  color: #ffffff; /* Change text color here */
+  font-family: 'Kanit', sans-serif;
+}
+
+.prof {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  /* width: 100%;
+  height: 100%; */
+  /* border: 1px solid red; */
+}
+.appBar{
+  width: 100%;
+  top: 0;
+  position: absolute;
+}
+.spread {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.formPfp {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+  /* .formPfp input {
+    margin-bottom: 10px;
+  } */
+
+/* .overlay {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  background-color: hsla(0, 83%, 2%, .1);
+  top: 0;
+  left: 0;
+  z-index: 1;
+  border-radius: 20px;
+  color: #3ab1c8;
+} */
+p{
+  color: #f6f4f4;
+  font-family: 'Kanit', sans-serif;
+  /* font-size: 36px; */
+  font-weight: 700;
+}
+.css-10hburv-MuiTypography-root{
+  font-family: 'Kanit', sans-serif;
+}
+span{
+  color: #d59bf6;
+}
+.span {
+  display: flex;
+  flex-direction: row;
+  align-self: center;
+}
+.error{
+  color: red;
+}
