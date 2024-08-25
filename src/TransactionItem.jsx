@@ -1,28 +1,38 @@
 import { formatNumber } from "./functions";
 import { formatDate } from "./functions";
 
-export default function TransactionItem({ transaction, loggedProfile }) {
+export default function TransactionItem({
+  transaction,
+  displayTransac,
+  loggedProfile,
+}) {
   return (
-    <li className="item">
+    <li className="item " onClick={() => displayTransac(transaction)}>
       <p>{formatDate(transaction.timestamp)}</p>
       {transaction.type === "transfer" &&
       loggedProfile.id === transaction.profileId ? (
-        <p>
+        <p className="truncate ... break-text">
           You{" "}
           <span className="red">sent N{formatNumber(transaction.amount)}</span>{" "}
-          to {transaction.recipientLastname} {transaction.recipientFirstname}
+          to{" "}
+          <span style={{ color: "#d59bf6" }}>
+            {transaction.recipientLastname} {transaction.recipientFirstname}
+          </span>
         </p>
       ) : transaction.type === "transfer" &&
         loggedProfile.id === transaction.recipientId ? (
-        <p>
+        <p className="truncate ... break-text">
           You{" "}
           <span className="green">
             received N{formatNumber(transaction.amount)}
           </span>{" "}
-          from {transaction.senderLastname} {transaction.senderFirstname}
+          from{" "}
+          <span style={{ color: "#d59bf6" }}>
+            {transaction.senderLastname} {transaction.senderFirstname}
+          </span>
         </p>
       ) : transaction.type === "deposit" ? (
-        <p>
+        <p className="truncate ... break-text">
           You{" "}
           <span className="green">
             deposited N{formatNumber(transaction.amount)}

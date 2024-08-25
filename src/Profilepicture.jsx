@@ -4,7 +4,7 @@ export default function ProfilePicture({
   loggedProfile,
   handleClick = () => {},
   pfpState,
-  size = 150,
+  size = 100,
 }) {
   function stringToColor(string) {
     let hash = 0;

@@ -53,15 +53,41 @@ export default function Deposit({
     await handleDeposit(formData.amount);
     resetDeposit();
   };
+
+  const limit = 99000000;
+
+  const isBelowLimit = (amount) => {
+    const total = Number(amount) + loggedProfile.balance;
+    if (total < limit) {
+      return true;
+    } else {
+      console.log(total);
+      return false;
+    }
+  };
+  const checkNegative = (amount) => {
+    if (Number(amount) > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  };
   const registerDepositOptions = {
     amount: {
       required: "Please enter an amount",
       validate: {
         correct: (v) => {
-          if (v > 0) {
-            return true;
-          } else {
+          // if (v > 0) {
+          //   return true;
+          // } else {
+          //   return "Please enter a valid amount";
+          // }
+          if (!isBelowLimit(v)) {
+            return "Balance limit is N99,000,000";
+          } else if (!checkNegative(v)) {
             return "Please enter a valid amount";
+          } else {
+            return true;
           }
         },
       },

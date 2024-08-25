@@ -10,6 +10,9 @@ import {
   doc,
   arrayUnion,
   getDoc,
+  arrayRemove,
+  limit,
+  startAfter,
 } from "firebase/firestore";
 import { db } from "./firebaseConfig";
 import { v4 as uuidv4 } from "uuid";
@@ -295,5 +298,69 @@ export async function isAccountNumberInBeneficiaryList(
   } catch (error) {
     console.error("Error checking beneficiary list:", error);
     return false;
+  }
+}
+
+export const fetchBeneficiaryList = async (userId) => {
+  try {
+    // Reference to the document containing the user's beneficiaries
+    const userDocRef = doc(db, "beneficiaries", userId);
+
+    // Fetch the document
+    const userDocSnap = await getDoc(userDocRef);
+
+    // Check if the document exists
+    if (userDocSnap.exists()) {
+      const userData = userDocSnap.data();
+      // Return the beneficiary list
+      return userData.beneficiaryList || [];
+    } else {
+      console.log("No beneficiary list found for this user.");
+      return [];
+    }
+  } catch (error) {
+    console.error("Error fetching beneficiary list:", error);
+    return [];
+  }
+};
+
+export async function deleteBeneficiary(userId, accountNumber) {
+  try {
+    // Reference to the user's beneficiaries document
+    const userDocRef = doc(db, "beneficiaries", userId);
+
+    // Fetch the current data of the document
+    const userDoc = await getDoc(userDocRef);
+
+    if (!userDoc.exists()) {
+      console.log("No such document!");
+      return;
+    }
+
+    const data = userDoc.data();
+    console.log("Current data:", data);
+
+    // Check if beneficiaryList exists and is an array
+    if (Array.isArray(data.beneficiaryList)) {
+      // Find the beneficiary with the matching account number
+      const beneficiaryToDelete = data.beneficiaryList.find(
+        (beneficiary) => beneficiary.accountNumber === accountNumber
+      );
+
+      if (beneficiaryToDelete) {
+        // Remove the beneficiary from the array
+        await updateDoc(userDocRef, {
+          beneficiaryList: arrayRemove(beneficiaryToDelete),
+        });
+
+        console.log("Beneficiary deleted successfully.");
+      } else {
+        console.log("Beneficiary not found in the list.");
+      }
+    } else {
+      console.log("Beneficiary list is not an array or does not exist.");
+    }
+  } catch (error) {
+    console.error("Error deleting beneficiary:", error);
   }
 }

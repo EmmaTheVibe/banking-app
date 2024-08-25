@@ -1,11 +1,12 @@
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { TextField } from "@mui/material";
 import Snackbar from "@mui/material/Snackbar";
 import Alert from "@mui/material/Alert";
 import React from "react";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Button } from "@mui/material";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
+import BeneficiaryList from "./BeneficiaryList";
 import ProfilePicture from "./Profilepicture";
 import Switch from "@mui/material/Switch";
 import {
@@ -24,6 +25,7 @@ import {
   fetchUserTransactions,
   addBeneficiary,
   isAccountNumberInBeneficiaryList,
+  fetchBeneficiaryList,
 } from "./firebaseService";
 import { alpha, styled } from "@mui/material/styles";
 
@@ -48,14 +50,30 @@ export default function Transfer({
 }) {
   const [loading, setLoading] = useState(false);
   const isButtonDisabled = loading === true;
+
   const [recipientName, setRecipientName] = useState("");
+  // const [recipientAccountNumber, setRecipientAccountNumber] = useState("");
+
+  const [loadBeneficiaries, setLoadBeneficiaries] = useState(false);
+  const [beneficiaryList, setBeneficiaryList] = useState([]);
+  const [isListVisible, setIsListVisible] = useState(false);
+  const formRef = useRef(null);
+  useEffect(() => {
+    if (isListVisible && formRef.current) {
+      formRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [isListVisible]);
+
   const [isBeneficiary, setIsBeneficiary] = useState(false);
   const [saveBeneficiary, setSaveBeneficiary] = useState(false);
+
   const handleSwitchChange = (event) => {
     setSaveBeneficiary(event.target.checked); // Update state based on switch status
   };
 
   const {
+    control,
+    trigger,
     register: registerTransfer,
     handleSubmit: handleSubmitTransfer,
     reset: resetTransfer,
@@ -73,7 +91,11 @@ export default function Transfer({
   };
   const { vertical, horizontal, openBar } = snackbar;
 
-  const handleAccountNumberChange = async (data) => {
+  // const handleAccNoChange = (event) => {
+  //   setRecipientAccountNumber(event.target.value);
+  // };
+
+  const checkAccountName = async (data) => {
     const accountNumber = data.toString();
     if (accountNumber) {
       const profilesRef = collection(db, "profiles");
@@ -108,6 +130,14 @@ export default function Transfer({
       setValue("accountName", "");
     }
   };
+
+  const handleLoadBeneficiaries = async () => {
+    setIsListVisible(true);
+    const beneficiaries = await fetchBeneficiaryList(loggedProfile.id);
+    setBeneficiaryList(beneficiaries);
+    console.log(beneficiaryList);
+  };
+
   const handleTransfer = async (data) => {
     setLoading(true);
     const transferAmount = parseFloat(data.amount);
@@ -176,19 +206,30 @@ export default function Transfer({
       console.error("Error during transfer:", error);
     }
   };
+
   const handleTransferForm = async (formData) => {
     await handleTransfer(formData);
     setRecipientName("");
     setValue("accountName", "");
     resetTransfer();
   };
+
   const checkBalance = (data) => {
-    if (data > loggedProfile.balance) {
+    if (Number(data) > loggedProfile.balance) {
       return false;
     } else {
       return true;
     }
   };
+
+  const checkVal = (data) => {
+    if (Number(data) > 0) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   const checkAccNo = (data) => {
     if (data === loggedProfile.accountNumber) {
       return false;
@@ -196,13 +237,14 @@ export default function Transfer({
       return true;
     }
   };
+
   const registerTransferOptions = {
     accountNumber: {
       required: "Please enter an account number",
       validate: {
         correct: async (v) => {
           if (checkAccNo(v)) {
-            await handleAccountNumberChange(v);
+            await checkAccountName(v);
             return true;
           } else {
             setRecipientName("");
@@ -216,15 +258,27 @@ export default function Transfer({
       required: "Please enter an amount",
       validate: {
         correct: (v) => {
-          if (checkBalance(v)) {
-            return true;
-          } else {
+          // if (checkBalance(v)) {
+          //   return true;
+          // } else if (!checkBalance(v)) {
+          //   return "Insufficient Balance";
+          // } else if (checkVal(v)) {
+          //   return true;
+          // } else if (!checkVal(v)) {
+          //   return "Please enter a valid amount";
+          // }
+          if (!checkBalance(v)) {
             return "Insufficient Balance";
+          } else if (!checkVal(v)) {
+            return "Please enter a valid amount";
+          } else {
+            return true;
           }
         },
       },
     },
   };
+
   return (
     <div className="transfer">
       <div className="success">
@@ -241,18 +295,55 @@ export default function Transfer({
           </Alert>
         </Snackbar>
       </div>
+
       <ProfilePicture loggedProfile={loggedProfile} pfpState={pfpState} />
       <p>
         Balance: <span>N{formatNumber(loggedProfile.balance.toFixed(2))}</span>
       </p>
+
+      <h2>Transfer</h2>
       <form
         className="form"
         noValidate
         onSubmit={handleSubmitTransfer(handleTransferForm)}
       >
-        <h2>Transfer</h2>
+        <div className="top">
+          <h5 onClick={handleLoadBeneficiaries} className="beneficiary-display">
+            Select beneficiary
+          </h5>
+        </div>
         <div className="label">
-          <TextField
+          <Controller
+            name="accountNumber"
+            control={control}
+            defaultValue=""
+            render={({ field }) => (
+              <TextField
+                {...field}
+                className="custom-text-field"
+                placeholder="Enter the recepient's account number"
+                label="Account number"
+                name="accountNumber"
+                variant="standard"
+                fullWidth
+                type="number"
+                // value={recipientAccountNumber}
+                // onChange={(e) => handleAccNoChange(e)}
+                {...registerTransfer(
+                  "accountNumber",
+                  registerTransferOptions.accountNumber
+                )}
+                helperText={
+                  transferErrors?.accountNumber && (
+                    <span className="error">
+                      {transferErrors.accountNumber.message}
+                    </span>
+                  )
+                }
+              />
+            )}
+          />
+          {/* <TextField
             className="custom-text-field"
             placeholder="Enter the recepient's account number"
             label="Account number"
@@ -260,6 +351,8 @@ export default function Transfer({
             variant="standard"
             fullWidth
             type="number"
+            value={recipientAccountNumber}
+            onChange={(e) => handleAccNoChange(e)}
             {...registerTransfer(
               "accountNumber",
               registerTransferOptions.accountNumber
@@ -271,7 +364,7 @@ export default function Transfer({
                 </span>
               )
             }
-          />
+          /> */}
         </div>
         <div className="label">
           <TextField
@@ -355,6 +448,17 @@ export default function Transfer({
           </Button>
         </div>
       </form>
+      {isListVisible && (
+        <BeneficiaryList
+          setIsListVisible={setIsListVisible}
+          formRef={formRef}
+          beneficiaryList={beneficiaryList}
+          setBeneficiaryList={setBeneficiaryList}
+          setValue={setValue}
+          trigger={trigger}
+          loggedProfile={loggedProfile}
+        />
+      )}
     </div>
   );
 }

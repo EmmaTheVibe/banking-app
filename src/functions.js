@@ -1,4 +1,5 @@
 function formatNumber(amount) {
+  if (!amount) return "";
   return amount.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 }
 
@@ -15,6 +16,7 @@ function getCurrentDateTime() {
 }
 
 function formatDate(input) {
+  if (!input) return "";
   // Convert Firestore Timestamp to JavaScript Date object
   const date = input.toDate();
 
@@ -37,4 +39,9 @@ function formatDate(input) {
   return formattedDate;
 }
 
-export { formatNumber, getCurrentDateTime, formatDate };
+function capitalizeFirstLetter(word) {
+  if (!word) return ""; // Handle empty or undefined input
+  return word.charAt(0).toUpperCase() + word.slice(1).toLowerCase();
+}
+
+export { formatNumber, getCurrentDateTime, formatDate, capitalizeFirstLetter };

@@ -10,6 +10,9 @@ import Transfer from "./Transfer";
 import ImageUpload from "./ImageUpload";
 import TransactionHistory from "./TransactionHistory";
 
+import NavBar from "./NavBar";
+import ModalBox from "./ModalBox";
+
 const theme = createTheme({
   palette: {
     ochre: {
@@ -22,6 +25,7 @@ const theme = createTheme({
 
 function App() {
   const [loadingHistory, setLoadingHistory] = useState(false);
+  const [loadingBeneficiaries, setLoadingBeneficiaries] = useState(false);
 
   const [showLogin, setShowLogin] = useState("signUp");
 
@@ -36,29 +40,32 @@ function App() {
     showPassword: true,
   });
   const [transactionHistory, setTransactionHistory] = useState([]);
+  // const [beneficiaryList, setBeneficiaryList] = useState([]);
 
   const [display, setDisplay] = useState("home");
   const [pfpState, setPfpState] = useState(false);
 
   return (
+    // <ModalBox />
     <main className="app">
-      <div className="appContainr">
-        {showLogin === "login" ? (
-          <LoginForm
-            themeColors={theme}
-            setShowLogin={setShowLogin}
-            loggedProfile={loggedProfile}
-            setLoggedProfile={setLoggedProfile}
-            pfpState={pfpState}
-            setPfpState={setPfpState}
-          />
-        ) : showLogin === "signUp" ? (
-          <SignUpForm
-            showLogin={showLogin}
-            setShowLogin={setShowLogin}
-            theme={theme}
-          />
-        ) : showLogin === "profile" ? (
+      {showLogin === "login" ? (
+        <LoginForm
+          themeColors={theme}
+          setShowLogin={setShowLogin}
+          loggedProfile={loggedProfile}
+          setLoggedProfile={setLoggedProfile}
+          pfpState={pfpState}
+          setPfpState={setPfpState}
+        />
+      ) : showLogin === "signUp" ? (
+        <SignUpForm
+          showLogin={showLogin}
+          setShowLogin={setShowLogin}
+          theme={theme}
+        />
+      ) : showLogin === "profile" ? (
+        <>
+          <NavBar />
           <Profile
             setDisplay={setDisplay}
             setTransactionHistory={setTransactionHistory}
@@ -118,11 +125,24 @@ function App() {
             ) : (
               ""
             )}
+            {/* {display === "beneficiaries" && loadingBeneficiaries ? (
+            <p>Loading...</p>
+          ) : display === "beneficiaries" && !loadingBeneficiaries ? (
+            <BeneficiaryList
+              loggedProfile={loggedProfile}
+              themeColors={theme}
+              beneficiaryList={beneficiaryList}
+              setDisplay={setDisplay}
+              pfpState={pfpState}
+            />
+          ) : (
+            ""
+          )} */}
           </Profile>
-        ) : (
-          ""
-        )}
-      </div>
+        </>
+      ) : (
+        ""
+      )}
     </main>
   );
 }

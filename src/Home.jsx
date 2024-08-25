@@ -61,7 +61,7 @@ export default function Home({
           loggedProfile={loggedProfile}
           handleClick={handleClick}
           pfpState={pfpState}
-          size={150}
+          size={100}
         />
         <Popover
           id={id}
