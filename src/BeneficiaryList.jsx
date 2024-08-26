@@ -109,7 +109,7 @@ export default function BeneficiaryList({
                   fontSize: "30px",
                 }}
                 {...stringAvatar(
-                  `${selectedBeneficiary.firstname?.toUpperCase()} ${selectedBeneficiary.lastname?.toUpperCase()}`
+                  `${selectedBeneficiary.lastname?.toUpperCase()} ${selectedBeneficiary.firstname?.toUpperCase()}`
                 )}
               />
             )}
