@@ -58,6 +58,8 @@ export default function Beneficiary({
                 width: "40px",
                 height: "40px",
                 border: "2px solid #d59bf6",
+                fontFamily: "Kanit",
+                fontSize: "16px",
               }}
               {...stringAvatar(
                 `${beneficiary.firstname.toUpperCase()} ${beneficiary.lastname.toUpperCase()}`
@@ -65,8 +67,9 @@ export default function Beneficiary({
             />
           )}
         </IconButton>
-        <p>
-          {beneficiary.lastname} {beneficiary.firstname}
+        <p className="truncate ...">
+          {beneficiary.lastname?.toUpperCase()}{" "}
+          {beneficiary.firstname?.toUpperCase()}
         </p>
       </div>
       <div className="options">
@@ -76,13 +79,7 @@ export default function Beneficiary({
         />
         <DeleteIcon
           sx={{ color: "#d59bf6", marginLeft: "20px", cursor: "pointer" }}
-          onClick={() =>
-            handleOpenModal(
-              beneficiary.firstname,
-              beneficiary.lastname,
-              beneficiary.accountNumber
-            )
-          }
+          onClick={() => handleOpenModal(beneficiary)}
         />
       </div>
     </div>

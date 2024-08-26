@@ -11,7 +11,6 @@ import ImageUpload from "./ImageUpload";
 import TransactionHistory from "./TransactionHistory";
 
 import NavBar from "./NavBar";
-import ModalBox from "./ModalBox";
 
 const theme = createTheme({
   palette: {
@@ -25,7 +24,6 @@ const theme = createTheme({
 
 function App() {
   const [loadingHistory, setLoadingHistory] = useState(false);
-  const [loadingBeneficiaries, setLoadingBeneficiaries] = useState(false);
 
   const [showLogin, setShowLogin] = useState("signUp");
 
@@ -40,7 +38,6 @@ function App() {
     showPassword: true,
   });
   const [transactionHistory, setTransactionHistory] = useState([]);
-  // const [beneficiaryList, setBeneficiaryList] = useState([]);
 
   const [display, setDisplay] = useState("home");
   const [pfpState, setPfpState] = useState(false);
@@ -65,7 +62,11 @@ function App() {
         />
       ) : showLogin === "profile" ? (
         <>
-          <NavBar />
+          <NavBar
+            themeColors={theme}
+            setShowLogin={setShowLogin}
+            setLoggedProfile={setLoggedProfile}
+          />
           <Profile
             setDisplay={setDisplay}
             setTransactionHistory={setTransactionHistory}

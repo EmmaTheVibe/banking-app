@@ -13,6 +13,7 @@ import {
   fetchUserTransactions,
 } from "./firebaseService";
 import { formatNumber } from "./functions";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 export default function Deposit({
   loggedProfile,
@@ -21,6 +22,8 @@ export default function Deposit({
   setDisplay,
   pfpState,
 }) {
+  const matches = useMediaQuery("(max-width:650px)");
+
   const [loading, setLoading] = useState(false);
   const isButtonDisabled = loading === true;
   const [snackbar, setSnackbar] = React.useState({
@@ -117,15 +120,19 @@ export default function Deposit({
         </Snackbar>
       </div>
       <ProfilePicture loggedProfile={loggedProfile} pfpState={pfpState} />
-      <p>
-        Balance: <span>N{formatNumber(loggedProfile.balance.toFixed(2))}</span>
+      <p style={{ margin: "14px 0px" }}>
+        BALANCE: <span>N{formatNumber(loggedProfile.balance.toFixed(2))}</span>
       </p>
       <form
         noValidate
         onSubmit={handleSubmitDeposit(handleDepositForm)}
         className="form"
       >
-        <h2>Deposit</h2>
+        <p
+          style={{ fontSize: `${matches ? "20px" : "26px"}`, color: "#d59bf6" }}
+        >
+          DEPOSIT
+        </p>
         <div className="label">
           <TextField
             className="custom-text-field"
@@ -146,6 +153,15 @@ export default function Deposit({
         <div className="buttons">
           <Button
             theme={themeColors}
+            color="ochre"
+            onClick={() => setDisplay("home")}
+            variant="outlined"
+            sx={{ fontFamily: "Kanit" }}
+          >
+            Cancel
+          </Button>
+          <Button
+            theme={themeColors}
             sx={{ fontFamily: "Kanit" }}
             color="ochre"
             type="submit"
@@ -163,15 +179,6 @@ export default function Deposit({
             ) : (
               "Deposit"
             )}
-          </Button>
-          <Button
-            theme={themeColors}
-            color="ochre"
-            onClick={() => setDisplay("home")}
-            variant="outlined"
-            sx={{ fontFamily: "Kanit" }}
-          >
-            Cancel
           </Button>
         </div>
       </form>

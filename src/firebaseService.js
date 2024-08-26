@@ -11,8 +11,6 @@ import {
   arrayUnion,
   getDoc,
   arrayRemove,
-  limit,
-  startAfter,
 } from "firebase/firestore";
 import { db } from "./firebaseConfig";
 import { v4 as uuidv4 } from "uuid";
@@ -32,6 +30,7 @@ export const addProfileToFirestore = async (profile) => {
     console.error("Error adding profile: ", e);
   }
 };
+
 export const getProfilesFromFirestore = async () => {
   try {
     const profilesCollection = collection(db, "profiles");
@@ -313,14 +312,21 @@ export const fetchBeneficiaryList = async (userId) => {
     if (userDocSnap.exists()) {
       const userData = userDocSnap.data();
       // Return the beneficiary list
-      return userData.beneficiaryList || [];
+      return { beneficiaries: userData.beneficiaryList || [], error: null };
     } else {
       console.log("No beneficiary list found for this user.");
-      return [];
+      return {
+        beneficiaries: [],
+        error:
+          "Maybe the beneficiaries are the friends we made along the way :)",
+      };
     }
   } catch (error) {
     console.error("Error fetching beneficiary list:", error);
-    return [];
+    return {
+      beneficiaries: [],
+      error: "Network error",
+    };
   }
 };
 

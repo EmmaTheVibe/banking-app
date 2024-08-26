@@ -82,15 +82,15 @@ export default function Home({
         <div className="span">
           <Greeting />
           <p>
-            , <span>{loggedProfile.firstname}.</span>
+            , <span>{loggedProfile.firstname?.toUpperCase()}</span>
           </p>
         </div>
         <p>
-          Account number: <span>{loggedProfile.accountNumber}</span>
+          ACCOUNT NUMBER: <span>{loggedProfile.accountNumber}</span>
         </p>
         <div className="balance-box">
           <p>
-            Balance:{" "}
+            BALANCE:{" "}
             <span>
               {loggedProfile.showBalance === true
                 ? `N${formatNumber(loggedProfile.balance.toFixed(2))}`

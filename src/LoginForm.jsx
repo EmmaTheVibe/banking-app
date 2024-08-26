@@ -13,6 +13,7 @@ import { useForm } from "react-hook-form";
 import { findProfileInFirestore } from "./firebaseService";
 import Alert from "@mui/material/Alert";
 import CircularProgress from "@mui/material/CircularProgress";
+import useMediaQuery from "@mui/material/useMediaQuery";
 
 export default function LoginForm({
   themeColors,
@@ -22,6 +23,7 @@ export default function LoginForm({
   pfpState,
   setPfpState,
 }) {
+  const matches = useMediaQuery("(max-width:650px)");
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
@@ -93,7 +95,14 @@ export default function LoginForm({
         noValidate
         onSubmit={handleSubmitLogin(handleLoginForm)}
       >
-        <h2>Login</h2>
+        <p
+          style={{
+            fontSize: `${matches ? "20px" : "26px"}`,
+            color: "#d59bf6",
+          }}
+        >
+          LOGIN
+        </p>
         <div className="label">
           <TextField
             className="custom-text-field"

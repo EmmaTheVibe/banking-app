@@ -1,10 +1,5 @@
 
 
-.suform {
-  width: 50%;
-  border: 2px solid blue;
-}
-
 .appContainer{
   display: flex;
   flex-direction: row;
@@ -108,11 +103,7 @@ p{
 span{
   color: #d59bf6;
 }
-.span {
-  display: flex;
-  flex-direction: row;
-  align-self: center;
-}
+
 .error{
   color: red;
 }

@@ -16,6 +16,9 @@ import {
 import emailjs from "emailjs-com";
 import { createTheme } from "@mui/material/styles";
 import CircularProgress from "@mui/material/CircularProgress";
+import Alert from "@mui/material/Alert";
+import useMediaQuery from "@mui/material/useMediaQuery";
+
 const theme = createTheme({
   palette: {
     ochre: {
@@ -48,6 +51,11 @@ const generateAcctNo = () => {
 };
 
 export default function SignUpForm({ setShowLogin }) {
+  const matches = useMediaQuery("(max-width:650px)");
+
+  const [invalidAlert, setInvalidAlert] = useState(false);
+  const [alertText, setAlertText] = useState("");
+
   const [loading, setLoading] = useState(false);
   let newProfile = {
     accountNumber: "",
@@ -102,7 +110,9 @@ export default function SignUpForm({ setShowLogin }) {
     try {
       const emailExists = await isEmailRegistered(formData.email);
       if (emailExists) {
-        console.error("Email is already registered.");
+        setLoading(false);
+        setInvalidAlert(true);
+        setAlertText("Email is already registered.");
         return;
       }
       await addProfile(formData);
@@ -179,12 +189,29 @@ export default function SignUpForm({ setShowLogin }) {
 
   return (
     <div className="sign-up">
+      {invalidAlert && (
+        <Alert
+          variant="filled"
+          severity="error"
+          sx={{ marginBottom: "15px", fontFamily: "Kanit" }}
+          className="alert"
+        >
+          {alertText}
+        </Alert>
+      )}
       <form
         className="form"
         noValidate
         onSubmit={handleSubmit(handleRegistration, handleError)}
       >
-        <h2>Sign up</h2>
+        <p
+          style={{
+            fontSize: `${matches ? "20px" : "26px"}`,
+            color: "#d59bf6",
+          }}
+        >
+          SIGN UP
+        </p>
 
         <div className="label">
           <TextField

@@ -9,6 +9,7 @@ import { useForm, Controller } from "react-hook-form";
 import BeneficiaryList from "./BeneficiaryList";
 import ProfilePicture from "./Profilepicture";
 import Switch from "@mui/material/Switch";
+import useMediaQuery from "@mui/material/useMediaQuery";
 import {
   collection,
   getDocs,
@@ -48,13 +49,15 @@ export default function Transfer({
   setDisplay,
   pfpState,
 }) {
+  const matches = useMediaQuery("(max-width:650px)");
+
   const [loading, setLoading] = useState(false);
   const isButtonDisabled = loading === true;
 
   const [recipientName, setRecipientName] = useState("");
   // const [recipientAccountNumber, setRecipientAccountNumber] = useState("");
 
-  const [loadBeneficiaries, setLoadBeneficiaries] = useState(false);
+  const [loadingBeneficiaries, setLoadingBeneficiaries] = useState(false);
   const [beneficiaryList, setBeneficiaryList] = useState([]);
   const [isListVisible, setIsListVisible] = useState(false);
   const formRef = useRef(null);
@@ -131,10 +134,21 @@ export default function Transfer({
     }
   };
 
+  const [errorMessage, setErrorMessage] = useState("");
   const handleLoadBeneficiaries = async () => {
     setIsListVisible(true);
-    const beneficiaries = await fetchBeneficiaryList(loggedProfile.id);
-    setBeneficiaryList(beneficiaries);
+    setLoadingBeneficiaries(true);
+    const { beneficiaries, error } = await fetchBeneficiaryList(
+      loggedProfile.id
+    );
+    if (error) {
+      setLoadingBeneficiaries(false);
+      setErrorMessage(error);
+    } else {
+      setLoadingBeneficiaries(false);
+      setBeneficiaryList(beneficiaries);
+      setErrorMessage(""); // Clear any previous errors
+    }
     console.log(beneficiaryList);
   };
 
@@ -258,15 +272,6 @@ export default function Transfer({
       required: "Please enter an amount",
       validate: {
         correct: (v) => {
-          // if (checkBalance(v)) {
-          //   return true;
-          // } else if (!checkBalance(v)) {
-          //   return "Insufficient Balance";
-          // } else if (checkVal(v)) {
-          //   return true;
-          // } else if (!checkVal(v)) {
-          //   return "Please enter a valid amount";
-          // }
           if (!checkBalance(v)) {
             return "Insufficient Balance";
           } else if (!checkVal(v)) {
@@ -297,18 +302,29 @@ export default function Transfer({
       </div>
 
       <ProfilePicture loggedProfile={loggedProfile} pfpState={pfpState} />
-      <p>
-        Balance: <span>N{formatNumber(loggedProfile.balance.toFixed(2))}</span>
+      <p style={{ margin: "14px 0px" }}>
+        BALANCE: <span>N{formatNumber(loggedProfile.balance.toFixed(2))}</span>
       </p>
 
-      <h2>Transfer</h2>
       <form
         className="form"
         noValidate
         onSubmit={handleSubmitTransfer(handleTransferForm)}
       >
-        <div className="top">
-          <h5 onClick={handleLoadBeneficiaries} className="beneficiary-display">
+        <div className="transaction-top">
+          <p
+            style={{
+              color: "#d59bf6",
+              fontSize: `${matches ? "20px" : "26px"}`,
+            }}
+          >
+            TRANSFER
+          </p>
+          <h5
+            onClick={handleLoadBeneficiaries}
+            className="beneficiary-display"
+            style={{ fontSize: `${matches ? "14px" : "16px"}` }}
+          >
             Select beneficiary
           </h5>
         </div>
@@ -343,28 +359,6 @@ export default function Transfer({
               />
             )}
           />
-          {/* <TextField
-            className="custom-text-field"
-            placeholder="Enter the recepient's account number"
-            label="Account number"
-            name="accountNumber"
-            variant="standard"
-            fullWidth
-            type="number"
-            value={recipientAccountNumber}
-            onChange={(e) => handleAccNoChange(e)}
-            {...registerTransfer(
-              "accountNumber",
-              registerTransferOptions.accountNumber
-            )}
-            helperText={
-              transferErrors?.accountNumber && (
-                <span className="error">
-                  {transferErrors.accountNumber.message}
-                </span>
-              )
-            }
-          /> */}
         </div>
         <div className="label">
           <TextField
@@ -420,6 +414,16 @@ export default function Transfer({
           <Button
             theme={themeColors}
             color="ochre"
+            onClick={() => setDisplay("home")}
+            variant="outlined"
+            sx={{ fontFamily: "Kanit" }}
+          >
+            Cancel
+          </Button>
+
+          <Button
+            theme={themeColors}
+            color="ochre"
             type="submit"
             variant="contained"
             sx={{ fontFamily: "Kanit" }}
@@ -437,26 +441,21 @@ export default function Transfer({
               "Transfer"
             )}
           </Button>
-          <Button
-            theme={themeColors}
-            color="ochre"
-            onClick={() => setDisplay("home")}
-            variant="outlined"
-            sx={{ fontFamily: "Kanit" }}
-          >
-            Cancel
-          </Button>
         </div>
       </form>
+      {errorMessage && <p>{errorMessage}</p>}
       {isListVisible && (
         <BeneficiaryList
           setIsListVisible={setIsListVisible}
           formRef={formRef}
           beneficiaryList={beneficiaryList}
           setBeneficiaryList={setBeneficiaryList}
+          loadingBeneficiaries={loadingBeneficiaries}
           setValue={setValue}
           trigger={trigger}
           loggedProfile={loggedProfile}
+          errorMessage={errorMessage}
+          themeColors={themeColors}
         />
       )}
     </div>

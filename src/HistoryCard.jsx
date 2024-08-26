@@ -14,7 +14,7 @@ export default function HistoryCard({ handleTransactions }) {
           fill="#d59bf6"
         />
       </svg>
-      <p>History</p>
+      <p>HISTORY</p>
     </div>
   );
 }

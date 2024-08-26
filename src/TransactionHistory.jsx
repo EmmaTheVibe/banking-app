@@ -5,7 +5,8 @@ import useMediaQuery from "@mui/material/useMediaQuery";
 import ModalBox from "./ModalBox";
 import { formatNumber } from "./functions";
 import { formatDate } from "./functions";
-import html2pdf from "html2pdf.js";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import { Button } from "@mui/material";
 
 export default function TransactionHistory({
   transactionHistory,
@@ -14,22 +15,6 @@ export default function TransactionHistory({
   setDisplay,
 }) {
   const contentRef = useRef();
-
-  // Function to generate the PDF
-  const generatePDF = () => {
-    const element = contentRef.current; // Get the div element
-
-    const options = {
-      // margin: 1,
-      filename: "Receipt.pdf",
-      image: { type: "jpeg", quality: 0.98 },
-      html2canvas: { scale: 2 },
-      jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
-    };
-
-    // Generate the PDF
-    html2pdf().from(element).set(options).save();
-  };
 
   const matches = useMediaQuery("(max-width:650px)");
 
@@ -41,7 +26,10 @@ export default function TransactionHistory({
   };
 
   const [currentPage, setCurrentPage] = useState(1);
-  const itemsPerPage = 7;
+  let itemsPerPage = 7;
+  if (matches) {
+    itemsPerPage = 15;
+  }
 
   // Calculate the total number of pages
   const totalPages = Math.ceil(transactionHistory.length / itemsPerPage);
@@ -61,110 +49,191 @@ export default function TransactionHistory({
         <div
           style={{
             backgroundColor: "#eee",
-            width: `${matches ? "320px" : "400px"}`,
+            width: `${matches ? "320px" : "450px"}`,
           }}
         >
-          <div
+          <table
             ref={contentRef}
             style={{
+              color: "#eee",
               backgroundColor: "#eee",
-              color: "#212121",
               padding: "12px",
               borderRadius: "12px",
             }}
           >
-            <p
-              style={{ fontSize: "14px", color: "#212121", fontWeight: "400" }}
-            >
-              Transaction type:{" "}
-              <span>
-                {transactionDetails.type === "transfer" &&
-                loggedProfile.id === transactionDetails.profileId
-                  ? "Debit"
-                  : "Credit"}
-              </span>
-            </p>
-            {transactionDetails.type === "transfer" && (
-              <>
-                <p
-                  style={{
-                    fontSize: "14px",
-                    fontWeight: "400",
-                    color: "#212121",
-                  }}
-                >
-                  Sender:{" "}
-                  <span>
-                    {transactionDetails.senderLastname}{" "}
-                    {transactionDetails.senderFirstname}
-                  </span>
-                </p>
-                <p
-                  style={{
-                    fontSize: "14px",
-                    fontWeight: "400",
-                    color: "#212121",
-                  }}
-                >
-                  Recipient:{" "}
-                  <span>
-                    {transactionDetails.recipientLastname}{" "}
-                    {transactionDetails.recipientFirstname}
-                  </span>
-                </p>
-              </>
-            )}
-            <p
-              style={{ fontSize: "14px", fontWeight: "400", color: "#212121" }}
-            >
-              Amount: <span>N{formatNumber(transactionDetails.amount)}</span>
-            </p>
-            <p
-              style={{ fontSize: "14px", fontWeight: "400", color: "#212121" }}
-            >
-              Transaction ID:{" "}
-              <span style={{ fontSize: "12px" }}>
-                {transactionDetails.transactionId}
-              </span>
-            </p>
-            <p
-              style={{ fontSize: "14px", fontWeight: "400", color: "#212121" }}
-            >
-              Date & Time:{" "}
-              <span>{formatDate(transactionDetails.timestamp)}</span>
-            </p>
-            <p
+            <thead
               style={{
-                fontSize: "14px",
-                fontWeight: "500",
-                marginTop: "12px",
-                color: "#212121",
+                backgroundColor: "#d59bf6",
+                height: "40px",
+                fontSize: `${matches ? "18px" : "20px"}`,
+                color: "#eee",
               }}
             >
-              Thanks for banking with us!
-            </p>
-          </div>
+              <tr>
+                <th colSpan="2">Transaction Receipt</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                style={{
+                  fontSize: `${matches ? "14px" : "18px"}`,
+                  color: "#212121",
+                  fontWeight: "400",
+                }}
+              >
+                <td>Transaction type: </td>
+                <td>
+                  <span>
+                    {transactionDetails.type === "transfer" &&
+                    loggedProfile.id === transactionDetails.profileId
+                      ? "Debit"
+                      : "Credit"}
+                  </span>
+                </td>
+              </tr>
+              {transactionDetails.type === "transfer" && (
+                <>
+                  <tr
+                    style={{
+                      fontSize: `${matches ? "14px" : "18px"}`,
+                      fontWeight: "400",
+                      color: "#212121",
+                    }}
+                  >
+                    <td>Sender: </td>
+                    <td>
+                      <span>
+                        {transactionDetails.senderLastname}{" "}
+                        {transactionDetails.senderFirstname}
+                      </span>
+                    </td>
+                  </tr>
+                  <tr
+                    style={{
+                      fontSize: `${matches ? "14px" : "18px"}`,
+                      fontWeight: "400",
+                      color: "#212121",
+                    }}
+                  >
+                    <td>Recipient: </td>
+                    <td>
+                      <span>
+                        {transactionDetails.recipientLastname}{" "}
+                        {transactionDetails.recipientFirstname}
+                      </span>
+                    </td>
+                  </tr>
+                </>
+              )}
+              <tr
+                style={{
+                  fontSize: `${matches ? "14px" : "18px"}`,
+                  fontWeight: "400",
+                  color: "#212121",
+                }}
+              >
+                <td>Amount: </td>
+                <td>
+                  <span>
+                    N{formatNumber(transactionDetails.amount?.toFixed(2))}
+                  </span>
+                </td>
+              </tr>
+              <tr
+                style={{
+                  fontSize: `${matches ? "14px" : "18px"}`,
+                  fontWeight: "400",
+                  color: "#212121",
+                }}
+              >
+                <td>Transaction ID: </td>
+                <td>
+                  {" "}
+                  <span style={{ fontSize: `${matches ? "14px" : "18px"}` }}>
+                    {transactionDetails.transactionId}
+                  </span>
+                </td>
+              </tr>
+              <tr
+                style={{
+                  fontSize: `${matches ? "14px" : "18px"}`,
+                  fontWeight: "400",
+                  color: "#212121",
+                }}
+              >
+                <td>Date & Time: </td>
+                <td>
+                  <span>{formatDate(transactionDetails.timestamp)}</span>
+                </td>
+              </tr>
+            </tbody>
+            <tfoot
+              style={{
+                backgroundColor: "#d59bf6",
+                height: "40px",
+                fontSize: "16px",
+                color: "#eee",
+              }}
+            >
+              <tr
+                style={{
+                  fontWeight: "500",
+                  textAlign: "center",
+                }}
+              >
+                <td colSpan="2">Thanks for banking with us!</td>
+              </tr>
+            </tfoot>
+          </table>
 
-          <div className="beneficiary-top" style={{ padding: "0px 12px" }}>
-            <p
-              onClick={generatePDF}
-              style={{ color: "#212121", fontSize: "16px" }}
-            >
-              Print
-            </p>
-            <p
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              alignItems: "center",
+              justifyContent: "flex-end",
+              position: "absolute",
+              right: "0",
+              bottom: "-50px",
+            }}
+          >
+            <Button
+              theme={themeColors}
+              sx={{ fontFamily: "Kanit" }}
+              color="ochre"
+              type="submit"
+              variant="contained"
               onClick={() => setOpenModal(false)}
-              style={{ color: "#212121", fontSize: "16px" }}
             >
-              Close
-            </p>
+              <ArrowBackIcon sx={{ color: "#eee" }} />
+            </Button>
           </div>
         </div>
       </ModalBox>
       <ul className="transaction-list">
-        <button className="close" onClick={() => setDisplay("home")}>
-          Close
-        </button>
+        <div
+          className="beneficiary-top"
+          style={{
+            padding: `${matches ? "0px 14px" : "0px 20px"}`,
+            marginBottom: "12px",
+          }}
+        >
+          <p
+            style={{
+              fontSize: `${matches ? "20px" : "26px"}`,
+              color: "#d59bf6",
+            }}
+          >
+            HISTORY
+          </p>
+          <h5
+            onClick={() => setDisplay("home")}
+            className="beneficiary-display"
+            style={{ fontSize: `${matches ? "14px" : "16px"}` }}
+          >
+            Close
+          </h5>
+        </div>
         {transactionHistory.length > 0 ? (
           currentItems.map((transaction) => (
             <TransactionItem

@@ -18,7 +18,7 @@ export default function TransferCard({ setDisplay }) {
           <path d="M20.8529,18.8541l-1.4994,1.4994a.5.5,0,0,1-.707-.707L19.293,19H15.5a.5.5,0,0,1,0-1h3.793l-.6465-.6465a.5.5,0,0,1,.707-.707l1.4994,1.4994a.5016.5016,0,0,1,0,.7082Z" />
         </g>
       </svg>
-      <p>Transfer</p>
+      <p>TRANSFER</p>
     </div>
   );
 }
