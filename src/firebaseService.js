@@ -58,6 +58,40 @@ export const findProfileInFirestore = async (email, password) => {
   }
 };
 
+export async function refreshAccount(accountNumber) {
+  if (!accountNumber) {
+    console.log("Account number is required to fetch user account.");
+    return null;
+  }
+
+  try {
+    // Reference to the users collection
+    const usersCollectionRef = collection(db, "profiles");
+
+    // Create a query to find user with the specified account number
+    const q = query(
+      usersCollectionRef,
+      where("accountNumber", "==", accountNumber)
+    );
+
+    // Execute the query
+    const querySnapshot = await getDocs(q);
+
+    // Check if any documents were found
+    if (!querySnapshot.empty) {
+      // Assuming account numbers are unique, take the first matching document
+      const userDoc = querySnapshot.docs[0];
+      return userDoc.data();
+    } else {
+      console.log("No user found with this account number.");
+      return null;
+    }
+  } catch (error) {
+    console.error("Error fetching user account by account number:", error);
+    return null;
+  }
+}
+
 export const updateBalanceInFirestore = async (profileId, newBalance) => {
   try {
     const profileRef = doc(db, "profiles", profileId);

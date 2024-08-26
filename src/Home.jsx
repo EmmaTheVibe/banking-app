@@ -123,7 +123,7 @@ export default function Home({
             <span>
               {loggedProfile.showBalance === true
                 ? `N${formatNumber(loggedProfile.balance.toFixed(2))}`
-                : "********"}
+                : "**********"}
             </span>
           </p>
           <IconButton

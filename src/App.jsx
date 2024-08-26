@@ -67,6 +67,7 @@ function App() {
             themeColors={theme}
             setShowLogin={setShowLogin}
             setLoggedProfile={setLoggedProfile}
+            loggedProfile={loggedProfile}
           />
           <Profile
             setDisplay={setDisplay}

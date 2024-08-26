@@ -2,12 +2,22 @@ import LogoutIcon from "@mui/icons-material/Logout";
 import { useState } from "react";
 import ModalBox from "./ModalBox";
 import { Button } from "@mui/material";
+import RefreshIcon from "@mui/icons-material/Refresh";
+import { refreshAccount } from "./firebaseService";
 
 export default function NavBar({
   themeColors,
   setShowLogin,
   setLoggedProfile,
+  loggedProfile,
 }) {
+  const refreshProfile = async () => {
+    const profile = await refreshAccount(loggedProfile.accountNumber);
+    if (profile) {
+      setLoggedProfile((curr) => ({ ...curr, balance: profile.balance }));
+      console.log(profile);
+    }
+  };
   const [openModal, setOpenModal] = useState(false);
   const handleLogout = () => {
     setOpenModal(false);
@@ -69,10 +79,24 @@ export default function NavBar({
       <div className="navbar">
         <div className="nav-items">
           <h2 style={{ color: "#eee" }}>The Bank</h2>
-          <LogoutIcon
-            sx={{ color: "#d59bf6", cursor: "pointer" }}
-            onClick={() => setOpenModal(true)}
-          />
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "1fr 1fr",
+              gap: "20px",
+              // flexDirection: "row",
+              // justifyContent: "center",
+            }}
+          >
+            <RefreshIcon
+              sx={{ color: "#d59bf6", cursor: "pointer" }}
+              onClick={refreshProfile}
+            />
+            <LogoutIcon
+              sx={{ color: "#d59bf6", cursor: "pointer" }}
+              onClick={() => setOpenModal(true)}
+            />
+          </div>
         </div>
       </div>
     </>

@@ -443,7 +443,7 @@ export default function Transfer({
           </Button>
         </div>
       </form>
-      {errorMessage && <p>{errorMessage}</p>}
+
       {isListVisible && (
         <BeneficiaryList
           setIsListVisible={setIsListVisible}
