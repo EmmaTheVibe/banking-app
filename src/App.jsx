@@ -53,6 +53,7 @@ function App() {
           setLoggedProfile={setLoggedProfile}
           pfpState={pfpState}
           setPfpState={setPfpState}
+          setDisplay={setDisplay}
         />
       ) : showLogin === "signUp" ? (
         <SignUpForm

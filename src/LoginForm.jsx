@@ -22,6 +22,7 @@ export default function LoginForm({
   setLoggedProfile,
   pfpState,
   setPfpState,
+  setDisplay,
 }) {
   const matches = useMediaQuery("(max-width:650px)");
   const [loading, setLoading] = useState(false);
@@ -50,6 +51,7 @@ export default function LoginForm({
       console.log(loggedProfile);
       setLoading(false);
       setShowLogin("profile");
+      setDisplay("home");
     } else {
       setLoading(false);
       setInvalidAlert(true);
