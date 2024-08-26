@@ -1,5 +1,5 @@
 import Greeting from "./Greeting";
-import React from "react";
+import React, { useState } from "react";
 import { IconButton } from "@mui/material";
 import Popover from "@mui/material/Popover";
 import { Visibility } from "@mui/icons-material";
@@ -53,6 +53,21 @@ export default function Home({
 
   const open = Boolean(anchorEl);
   const id = open ? "simple-popover" : undefined;
+  const [copied, setCopied] = useState(false);
+  const closeCopied = () => {
+    setCopied(false);
+  };
+  const copyToClipboard = () => {
+    navigator.clipboard
+      .writeText(loggedProfile.accountNumber)
+      .then(() => {
+        setCopied(true);
+        setTimeout(closeCopied, 1000);
+      })
+      .catch((err) => {
+        console.error("Failed to copy text: ", err);
+      });
+  };
 
   return (
     <div className={`home ${display === "home" ? "show" : ""}`}>
@@ -85,8 +100,22 @@ export default function Home({
             , <span>{loggedProfile.firstname?.toUpperCase()}</span>
           </p>
         </div>
-        <p>
-          ACCOUNT NUMBER: <span>{loggedProfile.accountNumber}</span>
+        <p onClick={copyToClipboard} style={{ position: "relative" }}>
+          ACCOUNT NUMBER: <span>{loggedProfile.accountNumber}</span>{" "}
+          {copied ? (
+            <span
+              style={{
+                fontSize: "12px",
+                position: "absolute",
+                right: "-50px",
+                top: "3px",
+              }}
+            >
+              Copied
+            </span>
+          ) : (
+            ""
+          )}
         </p>
         <div className="balance-box">
           <p>

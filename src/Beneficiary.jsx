@@ -62,7 +62,7 @@ export default function Beneficiary({
                 fontSize: "16px",
               }}
               {...stringAvatar(
-                `${beneficiary.firstname.toUpperCase()} ${beneficiary.lastname.toUpperCase()}`
+                `${beneficiary.lastname?.toUpperCase()} ${beneficiary.firstname?.toUpperCase()}`
               )}
             />
           )}

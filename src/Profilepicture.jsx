@@ -54,7 +54,7 @@ export default function ProfilePicture({
             border: "4px solid #d59bf6",
           }}
           {...stringAvatar(
-            `${loggedProfile.lastname?.toUpperCase()} ${loggedProfile.firstname?.toUpperCase()}`
+            `${loggedProfile.lastname.toUpperCase()} ${loggedProfile.firstname.toUpperCase()}`
           )}
         />
       )}
