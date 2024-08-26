@@ -164,9 +164,7 @@ export default function SignUpForm({ setShowLogin }) {
       pattern: {
         // value: /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/,
         value: /[A-Za-z]{4}/,
-        message: "Password must be exacty 4 letters",
-        // message:
-        //   "Password must be 8 characters long and must contain at least one number and one uppercase letter",
+        message: "Password must be at least 4 letters",
       },
     },
     confPassword: {
