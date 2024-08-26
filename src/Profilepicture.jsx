@@ -46,9 +46,15 @@ export default function ProfilePicture({
         />
       ) : (
         <Avatar
-          style={{ width: `${size}px`, height: `${size}px` }}
+          style={{
+            width: `${size}px`,
+            height: `${size}px`,
+            fontSize: "36px",
+            fontFamily: "Kanit",
+            border: "4px solid #d59bf6",
+          }}
           {...stringAvatar(
-            `${loggedProfile.firstname.toUpperCase()} ${loggedProfile.lastname.toUpperCase()}`
+            `${loggedProfile.lastname?.toUpperCase()} ${loggedProfile.firstname?.toUpperCase()}`
           )}
         />
       )}
