@@ -28,7 +28,7 @@ export default function TransactionHistory({
   const [currentPage, setCurrentPage] = useState(1);
   let itemsPerPage = 7;
   if (matches) {
-    itemsPerPage = 15;
+    itemsPerPage = 8;
   }
 
   // Calculate the total number of pages
