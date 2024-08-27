@@ -1,5 +1,5 @@
-import { formatNumber } from "./functions";
-import { formatDate } from "./functions";
+import { formatNumber } from "../utils/functions";
+import { formatDate } from "../utils/functions";
 
 export default function TransactionItem({
   transaction,

@@ -2,7 +2,7 @@ import Beneficiary from "./Beneficiary";
 import { TextField } from "@mui/material";
 import { useState } from "react";
 import ModalBox from "./ModalBox";
-import { deleteBeneficiary } from "./firebaseService";
+import { deleteBeneficiary } from "../firebase/firebaseService";
 import Avatar from "@mui/material/Avatar";
 import { IconButton } from "@mui/material";
 import { Button } from "@mui/material";

@@ -1,9 +1,9 @@
 import { initializeApp } from "firebase/app";
-// import { getAnalytics } from "firebase/analytics";
+
 import { getFirestore } from "firebase/firestore";
-import 'firebase/storage';
+import "firebase/storage";
 import { getStorage } from "firebase/storage";
-import { getAuth } from 'firebase/auth';
+import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
   apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
@@ -12,16 +12,13 @@ const firebaseConfig = {
   storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
   messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
   appId: process.env.REACT_APP_FIREBASE_APP_ID,
-  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID
+  measurementId: process.env.REACT_APP_FIREBASE_MEASUREMENT_ID,
 };
 
 const app = initializeApp(firebaseConfig);
-// const analytics = getAnalytics(app);
+
 const db = getFirestore(app);
 const storage = getStorage(app);
 const auth = getAuth(app);
-// const storage = firebase.storage();;
 
 export { db, storage, auth };
-
-// allow read, write: if request.time < timestamp.date(2024, 6, 20);

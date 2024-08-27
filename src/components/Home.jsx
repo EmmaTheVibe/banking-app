@@ -4,12 +4,12 @@ import { IconButton } from "@mui/material";
 import Popover from "@mui/material/Popover";
 import { Visibility } from "@mui/icons-material";
 import { VisibilityOff } from "@mui/icons-material";
-import { formatNumber } from "./functions";
-import { updateBalanceVisibility } from "./firebaseService";
+import { formatNumber } from "../utils/functions";
+import { updateBalanceVisibility } from "../firebase/firebaseService";
 import DepositCard from "./DepositCard";
 import TransferCard from "./TransferCard";
 import HistoryCard from "./HistoryCard";
-import { fetchUserTransactions } from "./firebaseService";
+import { fetchUserTransactions } from "../firebase/firebaseService";
 import ProfilePicture from "./Profilepicture";
 
 export default function Home({
@@ -70,7 +70,7 @@ export default function Home({
   };
 
   return (
-    <div className={`home ${display === "home" ? "show" : ""}`}>
+    <div className="home">
       <div className="info">
         <ProfilePicture
           loggedProfile={loggedProfile}

@@ -19,15 +19,15 @@ import {
   updateDoc,
   doc,
 } from "firebase/firestore";
-import { db } from "./firebaseConfig";
-import { formatNumber } from "./functions";
+import { db } from "../firebase/firebaseConfig";
+import { formatNumber } from "../utils/functions";
 import {
   logTransferTransaction,
   fetchUserTransactions,
   addBeneficiary,
   isAccountNumberInBeneficiaryList,
   fetchBeneficiaryList,
-} from "./firebaseService";
+} from "../firebase/firebaseService";
 import { alpha, styled } from "@mui/material/styles";
 
 const PinkSwitch = styled(Switch)(({ theme }) => ({
@@ -56,7 +56,6 @@ export default function Transfer({
   const [recipientBalance, setRecipientBalance] = useState(0);
 
   const [recipientName, setRecipientName] = useState("");
-  // const [recipientAccountNumber, setRecipientAccountNumber] = useState("");
 
   const [loadingBeneficiaries, setLoadingBeneficiaries] = useState(false);
   const [beneficiaryList, setBeneficiaryList] = useState([]);
@@ -72,7 +71,7 @@ export default function Transfer({
   const [saveBeneficiary, setSaveBeneficiary] = useState(false);
 
   const handleSwitchChange = (event) => {
-    setSaveBeneficiary(event.target.checked); // Update state based on switch status
+    setSaveBeneficiary(event.target.checked);
   };
 
   const {
@@ -94,10 +93,6 @@ export default function Transfer({
     setSnackbar({ ...snackbar, openBar: false });
   };
   const { vertical, horizontal, openBar } = snackbar;
-
-  // const handleAccNoChange = (event) => {
-  //   setRecipientAccountNumber(event.target.value);
-  // };
 
   const checkAccountName = async (data) => {
     const accountNumber = data.toString();
@@ -149,7 +144,7 @@ export default function Transfer({
     } else {
       setLoadingBeneficiaries(false);
       setBeneficiaryList(beneficiaries);
-      setErrorMessage(""); // Clear any previous errors
+      setErrorMessage("");
     }
     console.log(beneficiaryList);
   };
@@ -357,8 +352,6 @@ export default function Transfer({
                 variant="standard"
                 fullWidth
                 type="number"
-                // value={recipientAccountNumber}
-                // onChange={(e) => handleAccNoChange(e)}
                 {...registerTransfer(
                   "accountNumber",
                   registerTransferOptions.accountNumber
@@ -385,13 +378,13 @@ export default function Transfer({
             value={recipientName}
             sx={{
               "& .MuiInputLabel-root.Mui-disabled": {
-                color: "#d59bf6 !important", // Change this to your desired color
+                color: "#d59bf6 !important",
               },
               "& .MuiInputBase-input.Mui-disabled": {
-                color: "#d59bf6 !important", // For the input text color
+                color: "#d59bf6 !important",
               },
               "& .Mui-disabled": {
-                WebkitTextFillColor: "#d59bf6", // For Safari
+                WebkitTextFillColor: "#d59bf6",
               },
             }}
           />

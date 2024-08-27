@@ -1,6 +1,5 @@
 import SignUpForm from "./SignUpForm";
 import LoginForm from "./LoginForm";
-import "./App.css";
 import { useState } from "react";
 import { createTheme } from "@mui/material/styles";
 import Profile from "./Profile";
@@ -128,19 +127,6 @@ function App() {
             ) : (
               ""
             )}
-            {/* {display === "beneficiaries" && loadingBeneficiaries ? (
-            <p>Loading...</p>
-          ) : display === "beneficiaries" && !loadingBeneficiaries ? (
-            <BeneficiaryList
-              loggedProfile={loggedProfile}
-              themeColors={theme}
-              beneficiaryList={beneficiaryList}
-              setDisplay={setDisplay}
-              pfpState={pfpState}
-            />
-          ) : (
-            ""
-          )} */}
           </Profile>
         </>
       ) : (

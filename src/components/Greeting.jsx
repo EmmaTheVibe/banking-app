@@ -1,5 +1,4 @@
 import React from "react";
-import "./App.css";
 const Greeting = () => {
   const getGreeting = () => {
     const currentHour = new Date().getHours();

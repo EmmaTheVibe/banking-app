@@ -19,7 +19,7 @@ export const isEmailRegistered = async (email) => {
   const usersRef = collection(db, "profiles");
   const q = query(usersRef, where("email", "==", email));
   const querySnapshot = await getDocs(q);
-  return !querySnapshot.empty; // Returns true if email is found
+  return !querySnapshot.empty;
 };
 
 export const addProfileToFirestore = async (profile) => {
@@ -65,21 +65,16 @@ export async function refreshAccount(accountNumber) {
   }
 
   try {
-    // Reference to the users collection
     const usersCollectionRef = collection(db, "profiles");
 
-    // Create a query to find user with the specified account number
     const q = query(
       usersCollectionRef,
       where("accountNumber", "==", accountNumber)
     );
 
-    // Execute the query
     const querySnapshot = await getDocs(q);
 
-    // Check if any documents were found
     if (!querySnapshot.empty) {
-      // Assuming account numbers are unique, take the first matching document
       const userDoc = querySnapshot.docs[0];
       return userDoc.data();
     } else {
@@ -171,27 +166,23 @@ export const fetchUserTransactions = async (profileId) => {
   try {
     const transactionsRef = collection(db, "transactions");
 
-    // Query for transactions where profileId matches
     const senderQuery = query(
       transactionsRef,
       where("profileId", "==", profileId),
       orderBy("timestamp", "desc")
     );
 
-    // Query for transactions where recipientId matches
     const recipientQuery = query(
       transactionsRef,
       where("recipientId", "==", profileId),
       orderBy("timestamp", "desc")
     );
 
-    // Execute both queries
     const [senderSnapshot, recipientSnapshot] = await Promise.all([
       getDocs(senderQuery),
       getDocs(recipientQuery),
     ]);
 
-    // Combine results and remove duplicates (if any)
     const senderTransactions = senderSnapshot.docs.map((doc) => ({
       id: doc.id,
       ...doc.data(),
@@ -201,7 +192,6 @@ export const fetchUserTransactions = async (profileId) => {
       ...doc.data(),
     }));
 
-    // Combine and remove duplicates
     const combinedTransactions = [
       ...senderTransactions,
       ...recipientTransactions,
@@ -225,14 +215,11 @@ export const addBeneficiary = async (
   recipientImageUrl
 ) => {
   try {
-    // Reference the document using the sender's ID as the document ID
     const beneficiaryRef = doc(db, "beneficiaries", profileId);
 
-    // Check if the document already exists
     const docSnap = await getDoc(beneficiaryRef);
 
     if (docSnap.exists()) {
-      // If the document exists, update the beneficiary list
       await updateDoc(beneficiaryRef, {
         beneficiaryList: arrayUnion({
           accountNumber: recipientAccountNumber,
@@ -242,7 +229,6 @@ export const addBeneficiary = async (
         }),
       });
     } else {
-      // If the document doesn't exist, create it with the initial beneficiary
       await setDoc(beneficiaryRef, {
         beneficiaryList: [
           {
@@ -261,7 +247,6 @@ export const addBeneficiary = async (
   }
 };
 
-// Function to update the image URL in all relevant beneficiary lists
 export const updateBeneficiaryImageUrls = async (
   userAccountNumber,
   newImageUrl
@@ -280,7 +265,7 @@ export const updateBeneficiaryImageUrls = async (
           needsUpdate = true;
           return {
             ...beneficiary,
-            imageUrl: newImageUrl, // Update the image URL
+            imageUrl: newImageUrl,
           };
         }
         return beneficiary;
@@ -305,25 +290,20 @@ export async function isAccountNumberInBeneficiaryList(
   accountNumber
 ) {
   try {
-    // Get a reference to the logged-in user's beneficiary list document
     const beneficiaryDocRef = doc(db, "beneficiaries", loggedInUserId);
 
-    // Fetch the document
     const beneficiaryDocSnap = await getDoc(beneficiaryDocRef);
 
-    // Check if the document exists
     if (beneficiaryDocSnap.exists()) {
       const beneficiaryData = beneficiaryDocSnap.data();
 
-      // Assuming the beneficiary list is an array of objects
       const beneficiaryList = beneficiaryData.beneficiaryList;
 
-      // Check if the account number exists in the beneficiary list
       const accountExists = beneficiaryList.some(
         (beneficiary) => beneficiary.accountNumber === accountNumber
       );
 
-      return accountExists; // Returns true if account number exists, otherwise false
+      return accountExists;
     } else {
       console.log("No beneficiary list found for this user.");
       return false;
@@ -336,16 +316,13 @@ export async function isAccountNumberInBeneficiaryList(
 
 export const fetchBeneficiaryList = async (userId) => {
   try {
-    // Reference to the document containing the user's beneficiaries
     const userDocRef = doc(db, "beneficiaries", userId);
 
-    // Fetch the document
     const userDocSnap = await getDoc(userDocRef);
 
-    // Check if the document exists
     if (userDocSnap.exists()) {
       const userData = userDocSnap.data();
-      // Return the beneficiary list
+
       return { beneficiaries: userData.beneficiaryList || [], error: null };
     } else {
       console.log("No beneficiary list found for this user.");
@@ -366,10 +343,8 @@ export const fetchBeneficiaryList = async (userId) => {
 
 export async function deleteBeneficiary(userId, accountNumber) {
   try {
-    // Reference to the user's beneficiaries document
     const userDocRef = doc(db, "beneficiaries", userId);
 
-    // Fetch the current data of the document
     const userDoc = await getDoc(userDocRef);
 
     if (!userDoc.exists()) {
@@ -380,15 +355,12 @@ export async function deleteBeneficiary(userId, accountNumber) {
     const data = userDoc.data();
     console.log("Current data:", data);
 
-    // Check if beneficiaryList exists and is an array
     if (Array.isArray(data.beneficiaryList)) {
-      // Find the beneficiary with the matching account number
       const beneficiaryToDelete = data.beneficiaryList.find(
         (beneficiary) => beneficiary.accountNumber === accountNumber
       );
 
       if (beneficiaryToDelete) {
-        // Remove the beneficiary from the array
         await updateDoc(userDocRef, {
           beneficiaryList: arrayRemove(beneficiaryToDelete),
         });

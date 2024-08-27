@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import "./App.css";
 import { TextField } from "@mui/material";
 import { Button } from "@mui/material";
 import { KeyboardArrowRight } from "@mui/icons-material";
@@ -12,7 +11,7 @@ import {
   addProfileToFirestore,
   getProfilesFromFirestore,
   isEmailRegistered,
-} from "./firebaseService";
+} from "../firebase/firebaseService";
 import emailjs from "emailjs-com";
 import { createTheme } from "@mui/material/styles";
 import CircularProgress from "@mui/material/CircularProgress";
@@ -23,13 +22,9 @@ const theme = createTheme({
   palette: {
     ochre: {
       main: "#d59bf6",
-      // light: '#E9DB5D',
-      // dark: '#A29415',
+
       contrastText: "#242105",
     },
-    // formInput{
-    //   main:
-    // }
   },
 });
 const generatedAccNos = new Set();
@@ -37,14 +32,12 @@ const generatedAccNos = new Set();
 const generateAcctNo = () => {
   let tenDigitNumber;
 
-  // Continue generating numbers until a unique one is found
   do {
     tenDigitNumber = Math.floor(
       1000000000 + Math.random() * 9000000000
     ).toString();
   } while (generatedAccNos.has(tenDigitNumber));
 
-  // Add the unique number to the set
   generatedAccNos.add(tenDigitNumber);
 
   return tenDigitNumber;
@@ -162,7 +155,6 @@ export default function SignUpForm({ setShowLogin }) {
     password: {
       required: "Password is required",
       pattern: {
-        // value: /(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}/,
         value: /[A-Za-z]{4}/,
         message: "Password must be at least 4 letters",
       },
@@ -183,7 +175,6 @@ export default function SignUpForm({ setShowLogin }) {
   const [showConfPassword, setShowConfPassword] = useState(false);
   const handleClickShowConfPassword = () =>
     setShowConfPassword((show) => !show);
-  // const [showLogin, setShowLogin] = useState(true);
 
   return (
     <div className="sign-up">

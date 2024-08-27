@@ -11,10 +11,10 @@ import {
   updateBalanceInFirestore,
   logDepositTransaction,
   fetchUserTransactions,
-} from "./firebaseService";
-import { formatNumber } from "./functions";
+} from "../firebase/firebaseService";
+import { formatNumber } from "../utils/functions";
 import useMediaQuery from "@mui/material/useMediaQuery";
-import { refreshAccount } from "./firebaseService";
+import { refreshAccount } from "../firebase/firebaseService";
 
 export default function Deposit({
   loggedProfile,

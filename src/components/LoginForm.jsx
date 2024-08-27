@@ -1,6 +1,5 @@
 import { useState } from "react";
 import * as React from "react";
-import "./App.css";
 import { TextField } from "@mui/material";
 import { Button } from "@mui/material";
 import { KeyboardArrowLeft } from "@mui/icons-material";
@@ -10,7 +9,7 @@ import { IconButton } from "@mui/material";
 import { Visibility } from "@mui/icons-material";
 import { VisibilityOff } from "@mui/icons-material";
 import { useForm } from "react-hook-form";
-import { findProfileInFirestore } from "./firebaseService";
+import { findProfileInFirestore } from "../firebase/firebaseService";
 import Alert from "@mui/material/Alert";
 import CircularProgress from "@mui/material/CircularProgress";
 import useMediaQuery from "@mui/material/useMediaQuery";

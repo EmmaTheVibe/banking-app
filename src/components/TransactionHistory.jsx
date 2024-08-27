@@ -3,8 +3,8 @@ import Pagination from "@mui/material/Pagination";
 import { useState, useRef } from "react";
 import useMediaQuery from "@mui/material/useMediaQuery";
 import ModalBox from "./ModalBox";
-import { formatNumber } from "./functions";
-import { formatDate } from "./functions";
+import { formatNumber } from "../utils/functions";
+import { formatDate } from "../utils/functions";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import { Button } from "@mui/material";
 
@@ -31,15 +31,12 @@ export default function TransactionHistory({
     itemsPerPage = 8;
   }
 
-  // Calculate the total number of pages
   const totalPages = Math.ceil(transactionHistory.length / itemsPerPage);
 
-  // Calculate the items to display on the current page
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
   const currentItems = transactionHistory.slice(startIndex, endIndex);
 
-  // Handle page change
   const handlePageChange = (event, page) => {
     setCurrentPage(page);
   };
@@ -252,14 +249,14 @@ export default function TransactionHistory({
           sx={{
             "& .MuiPaginationItem-root": {
               color: "#d59bf6",
-              fontFamily: "Kanit", // Custom color for pagination items
+              fontFamily: "Kanit",
             },
             "& .Mui-selected": {
-              backgroundColor: "#d59bf6 !important", // Custom background color for selected page
-              color: "#eee !important", // Custom text color for selected page
+              backgroundColor: "#d59bf6 !important",
+              color: "#eee !important",
             },
             "& .MuiPaginationItem-previousNext": {
-              color: "#d59bf6", // Custom color for previous/next buttons
+              color: "#d59bf6",
             },
             marginTop: "12px",
           }}

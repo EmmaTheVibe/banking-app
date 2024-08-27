@@ -3,7 +3,7 @@ import { useState } from "react";
 import ModalBox from "./ModalBox";
 import { Button } from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
-import { refreshAccount } from "./firebaseService";
+import { refreshAccount } from "../firebase/firebaseService";
 
 export default function NavBar({
   themeColors,
@@ -78,14 +78,27 @@ export default function NavBar({
       </ModalBox>
       <div className="navbar">
         <div className="nav-items">
-          <h2 style={{ color: "#eee" }}>The Bank</h2>
+          <div
+            style={{
+              display: "flex",
+              flexDirection: "row",
+              justifyContent: "center",
+              alignItems: "center",
+            }}
+          >
+            <p
+              style={{ color: "#d59bf6", marginRight: "8px", fontSize: "20px" }}
+            >
+              The Bank
+            </p>
+            <img src="./images/bank-svgrepo-com.svg" alt="" />
+          </div>
+
           <div
             style={{
               display: "grid",
               gridTemplateColumns: "1fr 1fr",
               gap: "20px",
-              // flexDirection: "row",
-              // justifyContent: "center",
             }}
           >
             <RefreshIcon

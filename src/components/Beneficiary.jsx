@@ -5,10 +5,7 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 export default function Beneficiary({
   beneficiary,
-  removeBeneficiary,
-  setValue,
   selectBeneficiary,
-  loggedProfile,
   handleOpenModal,
 }) {
   function stringToColor(string) {

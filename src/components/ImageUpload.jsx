@@ -2,9 +2,9 @@ import { Button } from "@mui/material";
 import { useState } from "react";
 import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { updateDoc, doc } from "firebase/firestore";
-import { storage, db } from "./firebaseConfig";
+import { storage, db } from "../firebase/firebaseConfig";
 import CircularProgress from "@mui/material/CircularProgress";
-import { updateBeneficiaryImageUrls } from "./firebaseService";
+import { updateBeneficiaryImageUrls } from "../firebase/firebaseService";
 
 export default function ImageUpload({
   loggedProfile,
@@ -18,15 +18,13 @@ export default function ImageUpload({
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
-    // if (e.target.files[0]) {
-    //   setImage(e.target.files[0]);
-    // }
+
     if (file) {
       const validTypes = ["image/jpeg", "image/png", "image/jpg"];
       if (!validTypes.includes(file.type)) {
         return;
       }
-      const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
+      const maxSizeInBytes = 5 * 1024 * 1024;
       if (file.size > maxSizeInBytes) {
         return;
       }
