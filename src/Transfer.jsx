@@ -53,6 +53,7 @@ export default function Transfer({
 
   const [loading, setLoading] = useState(false);
   const isButtonDisabled = loading === true;
+  const [recipientBalance, setRecipientBalance] = useState(0);
 
   const [recipientName, setRecipientName] = useState("");
   // const [recipientAccountNumber, setRecipientAccountNumber] = useState("");
@@ -115,6 +116,7 @@ export default function Transfer({
         return;
       } else {
         const recipientData = recipientDoc.data();
+        setRecipientBalance(recipientData.balance);
         setRecipientName(
           `${recipientData.lastname} ${recipientData.firstname}`
         );
@@ -252,6 +254,16 @@ export default function Transfer({
     }
   };
 
+  const limit = 500000000;
+  const isBelowLimit = (amount) => {
+    const total = Number(amount) + recipientBalance;
+    if (total < limit) {
+      return true;
+    } else {
+      return false;
+    }
+  };
+
   const registerTransferOptions = {
     accountNumber: {
       required: "Please enter an account number",
@@ -276,6 +288,8 @@ export default function Transfer({
             return "Insufficient Balance";
           } else if (!checkVal(v)) {
             return "Please enter a valid amount";
+          } else if (!isBelowLimit(v)) {
+            return "Recipient balance limit exceeded";
           } else {
             return true;
           }

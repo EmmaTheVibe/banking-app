@@ -14,6 +14,7 @@ import {
 } from "./firebaseService";
 import { formatNumber } from "./functions";
 import useMediaQuery from "@mui/material/useMediaQuery";
+import { refreshAccount } from "./firebaseService";
 
 export default function Deposit({
   loggedProfile,
@@ -57,14 +58,14 @@ export default function Deposit({
     resetDeposit();
   };
 
-  const limit = 99000000;
+  const limit = 500000000;
 
-  const isBelowLimit = (amount) => {
-    const total = Number(amount) + loggedProfile.balance;
+  const isBelowLimit = async (amount) => {
+    const profile = await refreshAccount(loggedProfile.accountNumber);
+    const total = Number(amount) + profile.balance;
     if (total < limit) {
       return true;
     } else {
-      console.log(total);
       return false;
     }
   };
@@ -79,14 +80,10 @@ export default function Deposit({
     amount: {
       required: "Please enter an amount",
       validate: {
-        correct: (v) => {
-          // if (v > 0) {
-          //   return true;
-          // } else {
-          //   return "Please enter a valid amount";
-          // }
-          if (!isBelowLimit(v)) {
-            return "Balance limit is N99,000,000";
+        correct: async (v) => {
+          const isBelow = await isBelowLimit(v);
+          if (!isBelow) {
+            return "Balance limit is N500,000,000";
           } else if (!checkNegative(v)) {
             return "Please enter a valid amount";
           } else {
