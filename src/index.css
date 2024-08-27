@@ -30,6 +30,9 @@ input[type=number] {
   opacity: 1;
   color: #eee;
 }
+.css-1c2i806-MuiFormLabel-root-MuiInputLabel-root.Mui-disabled {
+  color: #eee;
+}
 .css-3h7if8 {
   width: 200px;
   color: #141010;

@@ -383,15 +383,23 @@ export default function Transfer({
             variant="standard"
             fullWidth
             value={recipientName}
-            // InputProps={{
-            //   readOnly: true,
-            // }}
             sx={{
+              "& .MuiInputLabel-root.Mui-disabled": {
+                color: "#dcd6f7 !important", // Change this to your desired color
+              },
+              "& .MuiInputBase-input.Mui-disabled": {
+                color: "#dcd6f7 !important", // For the input text color
+              },
               "& .Mui-disabled": {
-                color: "#eee", // Change the text color when disabled
-                borderColor: "red", // Change the border color when disabled
+                WebkitTextFillColor: "#dcd6f7", // For Safari
               },
             }}
+            // sx={{
+            //   "& .Mui-disabled": {
+            //     color: "#eee", // Change the text color when disabled
+            //     borderColor: "red", // Change the border color when disabled
+            //   },
+            // }}
           />
         </div>
         <div className="label">
