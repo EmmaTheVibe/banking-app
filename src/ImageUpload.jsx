@@ -17,8 +17,20 @@ export default function ImageUpload({
   const [image, setImage] = useState(null);
 
   const handleImageChange = (e) => {
-    if (e.target.files[0]) {
-      setImage(e.target.files[0]);
+    const file = e.target.files[0];
+    // if (e.target.files[0]) {
+    //   setImage(e.target.files[0]);
+    // }
+    if (file) {
+      const validTypes = ["image/jpeg", "image/png", "image/jpg"];
+      if (!validTypes.includes(file.type)) {
+        return;
+      }
+      const maxSizeInBytes = 5 * 1024 * 1024; // 5MB
+      if (file.size > maxSizeInBytes) {
+        return;
+      }
+      setImage(file);
     }
   };
 
@@ -48,7 +60,11 @@ export default function ImageUpload({
   return (
     <div>
       <form onSubmit={handleUpload} className="form">
-        <input type="file" onChange={handleImageChange} />
+        <input
+          type="file"
+          accept="image/jpeg, image/png, image/jpg"
+          onChange={handleImageChange}
+        />
         <div className="buttons">
           <Button
             theme={themeColors}
