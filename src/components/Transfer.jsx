@@ -270,7 +270,7 @@ export default function Transfer({
           } else {
             setRecipientName("");
             setValue("accountName", "");
-            return "You think say you wise lol";
+            return "Lol";
           }
         },
       },
