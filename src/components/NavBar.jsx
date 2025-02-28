@@ -5,6 +5,8 @@ import { Button } from "@mui/material";
 import RefreshIcon from "@mui/icons-material/Refresh";
 import { refreshAccount } from "../firebase/firebaseService";
 
+//navbar
+
 export default function NavBar({
   themeColors,
   setShowLogin,
